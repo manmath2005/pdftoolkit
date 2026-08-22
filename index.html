@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Primary Meta Tags -->
+  <title>PDFToolkit — Free & Private PDF Tools. No Upload. No Limits.</title>
+  <meta name="title" content="PDFToolkit — Free & Private PDF Tools. No Upload. No Limits.">
+  <meta name="description" content="24+ professional document tools running 100% in your browser. Convert, merge, compress, scan, sign & digitize PDFs privately. Zero server uploads. Works offline.">
+  <meta name="keywords" content="pdf tools, jpg to pdf, pdf merger, compress image, document scanner, pdf to text, certificate generator, ocr pdf, split pdf, sign pdf, watermark pdf, online pdf tools, private pdf converter, offline pdf tools">
+  <meta name="author" content="Manmath Sangave">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://pdftoolkit.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pdftoolkit.app/">
+  <meta property="og:title" content="PDFToolkit — 24+ Free PDF & Document Tools">
+  <meta property="og:description" content="Convert, compress, merge, scan and digitize documents entirely in your browser. Zero server uploads.">
+  <meta property="og:image" content="https://pdftoolkit.app/assets/og-preview.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://pdftoolkit.app/">
+  <meta property="twitter:title" content="PDFToolkit — Free Private PDF Tools">
+  <meta property="twitter:description" content="24+ tools. Zero server uploads. Works offline. 100% free.">
+  <meta property="twitter:image" content="https://pdftoolkit.app/assets/og-preview.png">
+
+  <!-- Favicon — stylized PDF spark logo -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%236366f1'/><stop offset='100%25' stop-color='%23a855f7'/></linearGradient></defs><rect width='32' height='32' rx='7' fill='url(%23g)'/><text x='3' y='21' font-family='Arial Black' font-size='12' font-weight='900' fill='white'>PDF</text><polyline points='23,5 28,10 23,10' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linejoin='round'/><line x1='25.5' y1='5' x2='25.5' y2='10' stroke='%23fbbf24' stroke-width='2'/></svg>">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PDFToolkit">
+
+  <!-- Schema.org JSON-LD Structured Data for Google Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PDFToolkit",
+    "url": "https://pdftoolkit.app/",
+    "description": "24+ client-side private PDF and document tools — 100% browser-based, zero server uploads.",
+    "author": {"@type": "Person", "name": "Manmath Sangave"},
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "featureList": ["JPG to PDF conversion","PDF Merger & Splitter","Certificate Generator","AI Document Scanner","Image Compression","Zero-server upload local privacy"]
+  }
+  </script>
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- High-Performance Client-Side Document & PDF Libraries -->
+  <!-- PDF-LIB (PDF creation, merge, split) -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <!-- PDF.js (PDF reading and page rendering) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- Mammoth.js (DOCX to HTML/Text conversion) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <!-- JSZip (Batch Image/PDF Export) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <!-- DOMPurify (XSS Prevention & HTML Sanitization) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+  <!-- Tesseract.js (Client-Side OCR) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <!-- QRCode.js (QR Code Generator) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- jsQR (Client-Side QR Code & Barcode Scanner) -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <!-- Canvas Confetti (UX feedback) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Security Banner (Zero-Upload Guarantee) -->
+  <div class="bg-emerald-950/80 border-b border-emerald-500/30 px-4 py-2 text-xs text-emerald-300 text-center flex items-center justify-center gap-2">
+    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+    <span><strong>100% Client-Side Privacy:</strong> Your files never leave your browser. Zero server uploads, zero data logs.</span>
+  </div>
+
+  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25 flex-shrink-0" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">
+          <svg viewBox="0 0 32 32" fill="none" class="w-7 h-7">
+            <text x="2" y="20" font-family="Arial Black,sans-serif" font-size="10" font-weight="900" fill="white">PDF</text>
+            <polyline points="23,5 28,10 23,10" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round"/>
+            <line x1="25.5" y1="5" x2="25.5" y2="10" stroke="#fbbf24" stroke-width="2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-xl font-black tracking-tight leading-none" style="background:linear-gradient(135deg,#818cf8,#a855f7 50%,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">PDFToolkit</div>
+          <div class="text-[9px] text-slate-500 tracking-widest uppercase font-medium">by Manmath Sangave</div>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm text-slate-300">
+        <a href="#tools"   class="hover:text-indigo-400 transition-colors">Tools</a>
+        <a href="#about"   class="hover:text-indigo-400 transition-colors">About</a>
+        <a href="#reviews" class="hover:text-indigo-400 transition-colors">Reviews</a>
+        <a href="#faq"     class="hover:text-indigo-400 transition-colors">FAQ</a>
+        <a href="#support" class="hover:text-amber-400 transition-colors font-semibold text-amber-500 flex items-center gap-1">&#9749; Support</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5">
+        <!-- PWA Offline Ready Badge -->
+        <div id="offlineStatusBadge" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>Offline Ready</span>
+        </div>
+
+        <!-- PWA Install App Button -->
+        <button id="installPwaBtn" class="hidden px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-md transition active:scale-95">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Install App</span>
+        </button>
+
+        <button id="themeToggle" class="p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 text-slate-400 hover:text-white hover:bg-slate-700 transition" title="Toggle Theme">
+          <i data-lucide="moon" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+
+   <!-- Hero Section -->
+  <section class="relative overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -top-20 right-0 w-80 h-80 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-12 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-6">
+        <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+        24+ Tools &nbsp;&bull;&nbsp; 100% Free &nbsp;&bull;&nbsp; 100% Private &nbsp;&bull;&nbsp; Works Offline
+      </div>
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-5xl mx-auto leading-tight">
+        Your Documents,<br><span style="background:linear-gradient(135deg,#818cf8,#a855f7 50%,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Your Privacy.</span>
+      </h1>
+      <p class="mt-5 text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
+        Convert, merge, compress, sign, scan &amp; digitize documents entirely inside your browser.<br>
+        <strong class="text-slate-200">Zero server uploads. Zero data leaks. Zero sign-up required.</strong>
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#tools" class="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-xl shadow-indigo-600/30 transition active:scale-95 text-base">
+          <i data-lucide="sparkles" class="w-4 h-4"></i><span>Explore All 24+ Tools</span>
+        </a>
+        <a href="#about" class="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-800/80 border border-slate-700 hover:border-indigo-500/50 text-slate-300 hover:text-white font-semibold rounded-xl transition text-base">
+          <i data-lucide="user-round" class="w-4 h-4"></i><span>Meet the Developer</span>
+        </a>
+      </div>
+      <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4"><div class="text-2xl font-black" style="background:linear-gradient(135deg,#818cf8,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">24+</div><div class="text-xs text-slate-500 mt-1">Professional Tools</div></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4"><div class="text-2xl font-black text-emerald-400">0 MB</div><div class="text-xs text-slate-500 mt-1">Sent to Server</div></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4"><div class="text-2xl font-black text-purple-400">&#8734;</div><div class="text-xs text-slate-500 mt-1">File Size Limit</div></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4"><div class="text-2xl font-black text-amber-400">Free</div><div class="text-xs text-slate-500 mt-1">Always &bull; No Watermark</div></div>
+      </div>
+    </div>
+  </section>
+
+    <!-- Toolbox Grid Section -->
+    <section id="tools" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-white">Full Utility Suite</h2>
+          <p class="text-sm text-slate-400">24+ professional private tools running 100% in your browser</p>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button class="filter-btn active px-3.5 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold" data-filter="all">All Tools</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium" data-filter="pdf">PDF Tools</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium" data-filter="security">Security & Sign</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium" data-filter="image">Image Tools</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium" data-filter="ai">Convert & AI</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        
+        <!-- Tool 1: JPG to PDF -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('jpgToPdf')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="file-image" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Convert</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">JPG / PNG to PDF</h3>
+          <p class="text-xs text-slate-400 mt-1">Combine multiple photos into a clean formatted PDF.</p>
+        </div>
+
+        <!-- Tool 2: PDF to JPG -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfToJpg')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="image" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Extract</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">PDF to JPG / PNG</h3>
+          <p class="text-xs text-slate-400 mt-1">Extract high-res pages as separate image files or ZIP.</p>
+        </div>
+
+        <!-- Tool 3: PDF Merger -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfMerger')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="merge" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Popular</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">PDF Merger</h3>
+          <p class="text-xs text-slate-400 mt-1">Combine two or more PDF files into a single unified file.</p>
+        </div>
+
+        <!-- Tool 4: PDF Splitter -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfSplit')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="scissors" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Split</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">PDF Splitter</h3>
+          <p class="text-xs text-slate-400 mt-1">Extract specific page ranges into new standalone PDFs.</p>
+        </div>
+
+        <!-- Tool 5: Rotate PDF -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfRotate')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="rotate-cw" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Orient</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Rotate PDF Pages</h3>
+          <p class="text-xs text-slate-400 mt-1">Rotate all or specific pages 90°, 180°, or 270° permanently.</p>
+        </div>
+
+        <!-- Tool 6: Sign PDF (E-Signature) -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="security" onclick="openToolModal('pdfSign')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="pen-tool" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 rounded">Sign</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">Sign PDF Document</h3>
+          <p class="text-xs text-slate-400 mt-1">Draw or type your signature and stamp it onto any page.</p>
+        </div>
+
+        <!-- Tool 7: Add Watermark -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="security" onclick="openToolModal('pdfWatermark')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="stamp" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Protect</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Add Watermark</h3>
+          <p class="text-xs text-slate-400 mt-1">Add custom text stamps, angle, opacity, and branding.</p>
+        </div>
+
+        <!-- Tool 8: Page Numbers -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfPageNumbers')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="hash" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Organize</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Add Page Numbers</h3>
+          <p class="text-xs text-slate-400 mt-1">Insert header or footer numbering across all pages.</p>
+        </div>
+
+        <!-- Tool 9: Redact & Blackout -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-red-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="security" onclick="openToolModal('pdfRedact')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="eye-off" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-red-950/80 text-red-400 border border-red-500/30 rounded">Privacy</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-red-400 transition-colors">Redact & Blackout</h3>
+          <p class="text-xs text-slate-400 mt-1">Censor and blackout sensitive text, IDs, and financial records.</p>
+        </div>
+
+        <!-- Tool 10: AI Document Scanner -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="ai" onclick="openToolModal('scanner')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="scan" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 rounded">✨ Auto Scan</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">AI Document Scanner</h3>
+          <p class="text-xs text-slate-400 mt-1">Real-time edge boundary detection, auto-focus & deskew.</p>
+        </div>
+
+        <!-- Tool 11: AI Digitizer & Typesetter -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-indigo-500/30 hover:border-indigo-400 hover:bg-slate-900/90 transition-all duration-300 cursor-pointer shadow-lg shadow-indigo-950/40" data-category="ai" onclick="openToolModal('aiDigitizer')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-500 flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-md shadow-indigo-500/30">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded">✨ Vector PDF</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-300 transition-colors">AI Document Digitizer</h3>
+          <p class="text-xs text-slate-400 mt-1">Reconstruct paper documents into pristine vector PDFs with colors & tables.</p>
+        </div>
+
+        <!-- Tool 12: DOCX to Text -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="ai" onclick="openToolModal('docxToTxt')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Word</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Word (.docx) to TXT</h3>
+          <p class="text-xs text-slate-400 mt-1">Extract text, paragraphs, and tables securely with XSS sanitizer.</p>
+        </div>
+
+        <!-- Tool 13: Markdown / Text to PDF -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="ai" onclick="openToolModal('textToPdf')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="type" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Create</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Text / Notes to PDF</h3>
+          <p class="text-xs text-slate-400 mt-1">Type or paste raw notes/markdown and compile as a vector PDF.</p>
+        </div>
+
+        <!-- Tool 14: Image Compressor & Resizer -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="image" onclick="openToolModal('imageCompress')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="shrink" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Compress</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Image Compressor</h3>
+          <p class="text-xs text-slate-400 mt-1">Reduce image file size up to 90% and adjust custom width/height.</p>
+        </div>
+
+        <!-- Tool 15: Image Format Converter -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="image" onclick="openToolModal('imgConvert')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Format</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Image Converter</h3>
+          <p class="text-xs text-slate-400 mt-1">Convert between PNG, JPG, WEBP, and BMP formats instantly.</p>
+        </div>
+
+        <!-- Tool 16: Grayscale / B&W Filter -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-slate-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="image" onclick="openToolModal('imgGrayscale')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-700/30 border border-slate-600 flex items-center justify-center text-slate-300 group-hover:scale-110 transition-transform">
+              <i data-lucide="contrast" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">B&W</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Black & White Filter</h3>
+          <p class="text-xs text-slate-400 mt-1">Turn color photos or scans into clean high-contrast black & white.</p>
+        </div>
+
+        <!-- Tool 17: AI Document Summarizer & Q&A -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-purple-500/30 hover:border-purple-400 hover:bg-slate-900/90 transition-all duration-300 cursor-pointer shadow-lg shadow-purple-950/30" data-category="ai" onclick="openToolModal('docSummarizer')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-md shadow-purple-500/30">
+              <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded">✨ AI Summary</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-purple-300 transition-colors">AI Document Summarizer</h3>
+          <p class="text-xs text-slate-400 mt-1">Extract key takeaways, reading time & word count from PDF/DOCX.</p>
+        </div>
+
+        <!-- Tool 18: QR Code Studio & Scanner -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="security" onclick="openToolModal('qrStudio')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="qr-code" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Generator & Scan</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">QR Code Studio</h3>
+          <p class="text-xs text-slate-400 mt-1">Generate custom styled QR codes or scan & decode with camera.</p>
+        </div>
+
+        <!-- Tool 19: Visual PDF Page Organizer -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfOrganizer')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="layout-grid" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Reorder</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">Organize PDF Pages</h3>
+          <p class="text-xs text-slate-400 mt-1">Visual grid thumbnail manager to reorder, delete & rotate pages.</p>
+        </div>
+
+        <!-- Tool 20: PDF Invert & Dark Mode -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('pdfDarkMode')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="moon-star" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Night Mode</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">PDF Dark Mode Inverter</h3>
+          <p class="text-xs text-slate-400 mt-1">Convert white glare PDFs to comfortable dark theme or high contrast.</p>
+        </div>
+
+        <!-- Tool 21: Invoice & Receipt Generator -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-teal-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('invoiceGen')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="receipt" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Billing</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-teal-400 transition-colors">Invoice Generator</h3>
+          <p class="text-xs text-slate-400 mt-1">Create professional vector PDF invoices and receipts with tax math.</p>
+        </div>
+
+        <!-- Tool 22: Certificate & Award Generator -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-yellow-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="pdf" onclick="openToolModal('certificateGen')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="award" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Award</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-yellow-400 transition-colors">Certificate Generator</h3>
+          <p class="text-xs text-slate-400 mt-1">Generate printable high-resolution completion & appreciation certificates.</p>
+        </div>
+
+        <!-- Tool 23: Image Color Palette Extractor -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-pink-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="image" onclick="openToolModal('colorPalette')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="palette" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Designer</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-pink-400 transition-colors">Color Palette Extractor</h3>
+          <p class="text-xs text-slate-400 mt-1">Extract dominant hex color codes & swatches from any document photo.</p>
+        </div>
+
+        <!-- Tool 24: CSV / Excel Viewer & PDF Exporter -->
+        <div class="tool-card group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all duration-300 cursor-pointer" data-category="ai" onclick="openToolModal('csvToPdf')">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="table" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded">Data</span>
+          </div>
+          <h3 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">CSV to Table & PDF</h3>
+          <p class="text-xs text-slate-400 mt-1">Upload CSV data files, preview grid tables, and export as styled PDF.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Security & Privacy Architecture Section -->
+    <section id="security" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-3xl font-bold text-white">Enterprise-Grade Client-Side Security</h2>
+        <p class="mt-3 text-slate-400">Why OmniConvert is more secure than traditional online converters</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+            <i data-lucide="lock" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Zero Server Data Leaks</h3>
+          <p class="text-sm text-slate-400 mt-2">
+            Standard converters upload your sensitive contracts to remote clouds. OmniConvert executes all conversions directly inside your browser's V8 JavaScript engine.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <div class="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-4">
+            <i data-lucide="shield-alert" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white">XSS & Zip-Slip Hardened</h3>
+          <p class="text-sm text-slate-400 mt-2">
+            Incoming `.docx` and `.pdf` streams are sanitized using DOMPurify and strict bounds checking, neutralizing malicious XXE payloads and infinite expansion loops.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4">
+            <i data-lucide="trash-2" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Automatic Memory Purging</h3>
+          <p class="text-sm text-slate-400 mt-2">
+            Allocated binary chunks and Blob URLs are automatically revoked via `URL.revokeObjectURL()` immediately after download, preventing memory leaks and forensic RAM scrapes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO FAQ Section -->
+    <section id="faq" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800">
+      <h2 class="text-2xl font-bold text-white text-center mb-8">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="group bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+          <summary class="font-medium text-white cursor-pointer list-none flex justify-between items-center">
+            <span>Are my confidential documents uploaded to any server?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <p class="text-sm text-slate-400 mt-3">
+            No. PDFToolkit uses WebAssembly, HTML5 Canvas, and modern Web APIs. The processing happens 100% locally on your computer/phone. Even if you turn off your Wi-Fi after loading the page, it works completely offline!
+          </p>
+        </details>
+
+        <details class="group bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+          <summary class="font-medium text-white cursor-pointer list-none flex justify-between items-center">
+            <span>Is PDFToolkit completely free?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <p class="text-sm text-slate-400 mt-3">
+            Yes, PDFToolkit is 100% free with no file size limits, no watermarks, and no sign-up required. Ever.
+          </p>
+        </details>
+
+        <details class="group bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+          <summary class="font-medium text-white cursor-pointer list-none flex justify-between items-center">
+            <span>How does the certificate signature upload work?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <p class="text-sm text-slate-400 mt-3">
+            Upload a photo of your handwritten signature (JPG/PNG). PDFToolkit automatically removes the paper background and converts it into a clean transparent digital signature stamp embedded in the certificate PDF.
+          </p>
+        </details>
+
+        <details class="group bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+          <summary class="font-medium text-white cursor-pointer list-none flex justify-between items-center">
+            <span>Can I share converted documents directly to WhatsApp or Gmail?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <p class="text-sm text-slate-400 mt-3">
+            Yes! On supported mobile and desktop browsers, PDFToolkit integrates directly with the native Web Share API, allowing you to beam files straight to WhatsApp, Gmail, Slack and other apps instantly.
+          </p>
+        </details>
+
+        <details class="group bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+          <summary class="font-medium text-white cursor-pointer list-none flex justify-between items-center">
+            <span>Can I use PDFToolkit without internet after the first load?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <p class="text-sm text-slate-400 mt-3">
+            Yes! PDFToolkit is a Progressive Web App (PWA). Once loaded, a Service Worker caches all assets. Install it as an app on your device and use all tools completely offline afterwards.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <hr style="border:none;border-top:1px solid rgba(99,102,241,.12)" class="mb-14">
+      <div class="text-center mb-10">
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full mb-4"><i data-lucide="user-round" class="w-3 h-3"></i> The Developer</span>
+        <h2 class="text-3xl font-bold text-white">About PDFToolkit</h2>
+      </div>
+      <div class="max-w-4xl mx-auto">
+        <div style="box-shadow:0 0 0 1px rgba(99,102,241,.12),0 8px 32px rgba(99,102,241,.06)" class="bg-slate-900/60 border border-slate-800 rounded-3xl overflow-hidden">
+          <div class="flex flex-col md:flex-row items-stretch">
+            <div class="md:w-72 w-full flex-shrink-0" style="background:linear-gradient(135deg,rgba(79,70,229,.25),rgba(124,58,237,.15),rgba(15,23,42,.95))">
+              <div class="h-full flex flex-col items-center justify-center gap-5 p-10">
+                <div class="relative">
+                  <div style="box-shadow:0 0 0 4px rgba(99,102,241,.3),0 0 40px rgba(99,102,241,.2)" class="w-36 h-36 rounded-full overflow-hidden border-4 border-indigo-500/50 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center" id="devAvatarWrap">
+                    <img src="dev_photo.jpg" alt="Manmath Sangave" class="w-full h-full object-cover" id="devPhotoImg">
+                  </div>
+                  <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-indigo-600 border-2 border-slate-900 rounded-full flex items-center justify-center">
+                    <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <div class="text-xl font-black text-white">Manmath Sangave</div>
+                  <div class="text-xs text-indigo-300 mt-1 font-medium">Developer &amp; Designer</div>
+                  <div class="mt-3 flex items-center justify-center gap-2">
+                    <span class="px-2 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded text-[10px] font-semibold">India 🇮🇳</span>
+                    <span class="px-2 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded text-[10px] font-semibold">Open Source</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 md:p-10">
+              <h3 class="text-2xl font-black text-white">Built with love for <span style="background:linear-gradient(135deg,#818cf8,#a855f7 50%,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Privacy &amp; Freedom</span></h3>
+              <p class="mt-4 text-slate-400 leading-relaxed">Hi! I'm <strong class="text-white">Manmath Sangave</strong>, the developer behind PDFToolkit. I built this platform because I was frustrated with online PDF tools that force you to upload your private contracts, ID cards, and personal documents to anonymous servers just to do a simple file conversion.</p>
+              <p class="mt-3 text-slate-400 leading-relaxed">PDFToolkit is my answer — a full-featured document suite that runs <strong class="text-white">100% inside your browser</strong>. No account, no uploads, no data collection. Your files stay yours.</p>
+              <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex items-start gap-2.5"><div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></div><span class="text-sm text-slate-300">24+ free professional tools</span></div>
+                <div class="flex items-start gap-2.5"><div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></div><span class="text-sm text-slate-300">100% client-side processing</span></div>
+                <div class="flex items-start gap-2.5"><div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></div><span class="text-sm text-slate-300">Works completely offline (PWA)</span></div>
+                <div class="flex items-start gap-2.5"><div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3"></i></div><span class="text-sm text-slate-300">No watermarks, no sign-up</span></div>
+              </div>
+              <div class="mt-8 flex flex-wrap gap-3">
+                <a href="#support" class="inline-flex items-center gap-2 px-5 py-2.5 text-white text-sm font-bold rounded-xl shadow-lg transition active:scale-95" style="background:linear-gradient(135deg,#f97316,#ef4444)">&#9749; Support My Work</a>
+                <a href="#reviews" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 border border-slate-700 hover:border-indigo-500/50 text-slate-300 hover:text-white text-sm font-semibold rounded-xl transition"><i data-lucide="star" class="w-4 h-4 text-amber-400"></i> Leave a Review</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUY ME A CHAI / UPI SUPPORT -->
+    <section id="support" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <hr style="border:none;border-top:1px solid rgba(99,102,241,.12)" class="mb-14">
+      <div class="max-w-2xl mx-auto">
+        <div style="box-shadow:0 0 0 1px rgba(245,158,11,.15),0 8px 32px rgba(245,158,11,.06);background:linear-gradient(135deg,rgba(120,53,15,.22),rgba(15,23,42,.97) 60%)" class="rounded-3xl overflow-hidden border border-amber-500/20">
+          <div class="p-8 sm:p-10">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-4xl">&#9749;</span>
+              <div>
+                <h2 class="text-2xl font-black text-white">Buy Me a Chai!</h2>
+                <p class="text-amber-400 text-sm font-medium">If PDFToolkit saved your time, consider buying me a cup</p>
+              </div>
+            </div>
+            <p class="text-slate-400 text-sm leading-relaxed">PDFToolkit is built and maintained solo by <strong class="text-white">Manmath Sangave</strong>, completely free. If this tool has been useful — whether for office work, studies, or personal projects — your small tip motivates new features!</p>
+            <div class="mt-8 bg-slate-900/80 border border-amber-500/20 rounded-2xl p-6">
+              <div class="flex flex-col sm:flex-row items-center gap-6">
+                <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                  <div id="upiQrCode" class="w-36 h-36 bg-white rounded-xl overflow-hidden flex items-center justify-center p-1"></div>
+                  <span class="text-xs text-slate-500">Scan with any UPI App</span>
+                </div>
+                <div class="flex-1 w-full">
+                  <div class="text-xs text-slate-500 mb-1 uppercase tracking-wider font-semibold">UPI ID</div>
+                  <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 mb-4">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
+                    <span class="font-mono font-bold text-white text-sm flex-1">7030403004@upi</span>
+                    <button onclick="copyUpiId()" class="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/40 text-amber-400 text-xs font-bold rounded-lg border border-amber-500/30 transition flex items-center gap-1">
+                      <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                    </button>
+                  </div>
+                  <div class="text-xs text-slate-500 mb-2 uppercase tracking-wider font-semibold">Quick Tip Amount</div>
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="setUpiAmount(10)"  class="px-3.5 py-1.5 bg-slate-800 border border-slate-700 hover:border-amber-400/60 hover:bg-amber-500/10 text-slate-300 hover:text-amber-300 rounded-lg text-sm font-semibold transition">Rs.10</button>
+                    <button onclick="setUpiAmount(21)"  class="px-3.5 py-1.5 bg-slate-800 border border-slate-700 hover:border-amber-400/60 hover:bg-amber-500/10 text-slate-300 hover:text-amber-300 rounded-lg text-sm font-semibold transition">Rs.21</button>
+                    <button onclick="setUpiAmount(51)"  class="px-3.5 py-1.5 bg-slate-800 border border-slate-700 hover:border-amber-400/60 hover:bg-amber-500/10 text-slate-300 hover:text-amber-300 rounded-lg text-sm font-semibold transition">Rs.51</button>
+                    <button onclick="setUpiAmount(101)" class="px-3.5 py-1.5 bg-amber-600/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 rounded-lg text-sm font-bold transition">Rs.101 &#11088;</button>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300">GPay</span>
+                    <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300">PhonePe</span>
+                    <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300">Paytm</span>
+                    <span class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300">BHIM UPI</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="upiToast" class="hidden mt-4 p-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-emerald-300 text-sm text-center font-medium">
+              UPI ID copied! Paste it in your payment app. Thank you! &#9829;
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <hr style="border:none;border-top:1px solid rgba(99,102,241,.12)" class="mb-14">
+      <div class="text-center mb-10">
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full mb-4"><i data-lucide="star" class="w-3 h-3"></i> Community Reviews</span>
+        <h2 class="text-3xl font-bold text-white">What People Say</h2>
+        <p class="text-slate-400 mt-2 text-sm">Real reviews from real users — stored in your browser</p>
+      </div>
+      <div id="reviewWall" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+        <div style="animation:slideUp .4s ease both" class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-indigo-500/30 transition">
+          <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">RK</div><div><div class="font-semibold text-white text-sm">Rahul K.</div><div class="text-xs text-slate-500">Mumbai, India</div></div><div class="ml-auto text-amber-400 text-sm">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div>
+          <p class="text-sm text-slate-400">&ldquo;Incredible! I merged 6 PDFs without uploading anything. My contracts stay private. Best tool I&apos;ve found.&rdquo;</p>
+          <div class="mt-3 text-[10px] text-slate-600">Aug 2026</div>
+        </div>
+        <div style="animation:slideUp .4s ease both .1s" class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-indigo-500/30 transition">
+          <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">PT</div><div><div class="font-semibold text-white text-sm">Priya T.</div><div class="text-xs text-slate-500">Pune, India</div></div><div class="ml-auto text-amber-400 text-sm">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div>
+          <p class="text-sm text-slate-400">&ldquo;The certificate generator with 8 templates is amazing! Live preview is super helpful. My students love their certificates!&rdquo;</p>
+          <div class="mt-3 text-[10px] text-slate-600">Aug 2026</div>
+        </div>
+        <div style="animation:slideUp .4s ease both .2s" class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-indigo-500/30 transition">
+          <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">AS</div><div><div class="font-semibold text-white text-sm">Akash S.</div><div class="text-xs text-slate-500">Bengaluru, India</div></div><div class="ml-auto text-amber-400 text-sm">&#9733;&#9733;&#9733;&#9733;&#9734;</div></div>
+          <p class="text-sm text-slate-400">&ldquo;AI document scanner digitizes my notes perfectly. Works offline for field work where internet is spotty.&rdquo;</p>
+          <div class="mt-3 text-[10px] text-slate-600">Aug 2026</div>
+        </div>
+      </div>
+      <!-- Review Submit Form -->
+      <div class="max-w-xl mx-auto bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8">
+        <h3 class="text-lg font-bold text-white mb-1 flex items-center gap-2"><i data-lucide="message-square-plus" class="w-5 h-5 text-indigo-400"></i>Leave Your Review</h3>
+        <p class="text-xs text-slate-500 mb-5">Stored locally in your browser &mdash; shown above</p>
+        <div class="space-y-4">
+          <input id="reviewName" type="text" placeholder="Your name" maxlength="40" class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-indigo-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition">
+          <div>
+            <label class="text-xs text-slate-400 mb-2 block font-medium">Rating</label>
+            <div id="starRatingRow" class="flex gap-2">
+              <button class="star-btn text-slate-600 text-2xl" data-val="1" onclick="setReviewStar(1)">&#9733;</button>
+              <button class="star-btn text-slate-600 text-2xl" data-val="2" onclick="setReviewStar(2)">&#9733;</button>
+              <button class="star-btn text-slate-600 text-2xl" data-val="3" onclick="setReviewStar(3)">&#9733;</button>
+              <button class="star-btn text-slate-600 text-2xl" data-val="4" onclick="setReviewStar(4)">&#9733;</button>
+              <button class="star-btn text-slate-600 text-2xl" data-val="5" onclick="setReviewStar(5)">&#9733;</button>
+            </div>
+          </div>
+          <textarea id="reviewText" placeholder="Share your experience with PDFToolkit..." rows="3" maxlength="300" class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 focus:border-indigo-500 rounded-xl text-sm text-white placeholder-slate-500 outline-none transition resize-none"></textarea>
+          <button onclick="submitReview()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i> Submit Review
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Tool Modal -->
+  <div id="toolModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div id="modalIcon" class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+            <i data-lucide="wrench" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 id="modalTitle" class="text-lg font-bold text-white">Tool Title</h3>
+            <p id="modalDesc" class="text-xs text-slate-400">Tool description goes here</p>
+          </div>
+        </div>
+        <button onclick="closeToolModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Dynamic Form) -->
+      <div id="modalBody" class="p-6 overflow-y-auto space-y-6 flex-grow">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        <button onclick="closeToolModal()" class="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white transition">Cancel</button>
+        <button id="modalActionBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg transition active:scale-95">
+          <span>Process File</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 pt-12 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div class="col-span-2 md:col-span-1">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">
+              <svg viewBox="0 0 32 32" fill="none" class="w-6 h-6"><text x="2" y="20" font-family="Arial Black,sans-serif" font-size="10" font-weight="900" fill="white">PDF</text></svg>
+            </div>
+            <span class="font-black text-lg" style="background:linear-gradient(135deg,#818cf8,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">PDFToolkit</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed mb-3">Your Documents, Your Privacy. Processed Locally, Delivered Instantly.</p>
+          <p class="text-xs text-slate-600">Built with &#9829; by <span class="text-slate-400 font-medium">Manmath Sangave</span></p>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">PDF Tools</h4>
+          <ul class="space-y-2 text-xs text-slate-500">
+            <li><a href="#tools" class="hover:text-indigo-400 transition">JPG to PDF</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">PDF Merger</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">PDF Splitter</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">Sign PDF</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">Certificate Generator</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">AI &amp; More</h4>
+          <ul class="space-y-2 text-xs text-slate-500">
+            <li><a href="#tools" class="hover:text-indigo-400 transition">AI Document Scanner</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">AI Digitizer (OCR)</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">Image Compressor</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">QR Code Studio</a></li>
+            <li><a href="#tools" class="hover:text-indigo-400 transition">Invoice Generator</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Help &amp; Info</h4>
+          <ul class="space-y-2 text-xs text-slate-500">
+            <li><a href="#security" class="hover:text-indigo-400 transition">Privacy Policy</a></li>
+            <li><a href="#faq" class="hover:text-indigo-400 transition">FAQ</a></li>
+            <li><a href="#about" class="hover:text-indigo-400 transition">About Developer</a></li>
+            <li><a href="#reviews" class="hover:text-indigo-400 transition">Leave a Review</a></li>
+            <li><a href="#support" class="hover:text-amber-400 transition">Buy Me a Chai &#9749;</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-slate-800/60 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+        <div>&copy; 2026 PDFToolkit by Manmath Sangave. All processing performed on your device.</div>
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-800"></i> 100% Client-Side</span>
+          <span class="flex items-center gap-1"><i data-lucide="wifi-off" class="w-3.5 h-3.5 text-indigo-800"></i> Works Offline</span>
+          <span class="flex items-center gap-1"><i data-lucide="zap" class="w-3.5 h-3.5 text-amber-800"></i> Always Free</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    .star-btn{cursor:pointer;transition:transform .15s,color .1s}
+    .star-btn.active{color:#fbbf24;transform:scale(1.15)}
+  </style>
+
+  <script>
+    // Developer photo fallback
+    window.addEventListener('DOMContentLoaded', function() {
+      var img = document.getElementById('devPhotoImg');
+      if (img) {
+        img.onerror = function() {
+          img.style.display = 'none';
+          var wrap = document.getElementById('devAvatarWrap');
+          if (wrap) {
+            var span = document.createElement('span');
+            span.className = 'text-5xl font-black text-white select-none';
+            span.textContent = 'MS';
+            wrap.appendChild(span);
+          }
+        };
+      }
+
+      // Generate UPI QR
+      if (typeof QRCode !== 'undefined' && document.getElementById('upiQrCode')) {
+        try {
+          new QRCode(document.getElementById('upiQrCode'), {
+            text: 'upi://pay?pa=7030403004@upi&pn=Manmath%20Sangave&am=21&cu=INR&tn=PDFToolkit%20Support',
+            width: 136, height: 136, colorDark: '#1e1b4b', colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        } catch(e) { console.warn('QR init:', e); }
+      }
+
+      // Load saved reviews
+      var savedReviews = JSON.parse(localStorage.getItem('pdftoolkit_reviews') || '[]');
+      savedReviews.forEach(function(r) { appendReviewCard(r, false); });
+
+      // Star rating init
+      setReviewStar(5);
+    });
+
+    function setUpiAmount(amt) {
+      var el = document.getElementById('upiQrCode');
+      if (!el || typeof QRCode === 'undefined') return;
+      el.innerHTML = '';
+      try {
+        new QRCode(el, {
+          text: 'upi://pay?pa=7030403004@upi&pn=Manmath%20Sangave&am=' + amt + '&cu=INR&tn=PDFToolkit%20Support',
+          width: 136, height: 136, colorDark: '#1e1b4b', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch(e) {}
+    }
+
+    function copyUpiId() {
+      navigator.clipboard.writeText('7030403004@upi').then(function() {
+        var t = document.getElementById('upiToast');
+        t.classList.remove('hidden');
+        setTimeout(function() { t.classList.add('hidden'); }, 4500);
+      });
+    }
+
+    var selectedStars = 5;
+    function setReviewStar(n) {
+      selectedStars = n;
+      document.querySelectorAll('.star-btn').forEach(function(b) {
+        var v = parseInt(b.dataset.val);
+        b.classList.toggle('active', v <= n);
+        b.style.color = v <= n ? '#fbbf24' : '#475569';
+      });
+    }
+
+    function appendReviewCard(r, prepend) {
+      var wall = document.getElementById('reviewWall');
+      if (!wall) return;
+      var card = document.createElement('div');
+      card.style.animation = 'slideUp .4s ease both';
+      card.className = 'bg-slate-900/60 border border-indigo-500/20 rounded-2xl p-5 hover:border-indigo-500/40 transition';
+      var initials = r.name.trim().split(' ').map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2);
+      var stars = ''; for(var i=1;i<=5;i++) stars += (i<=r.stars ? '&#9733;' : '&#9734;');
+      var clean = r.text.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      card.innerHTML = '<div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">' + initials + '</div><div><div class="font-semibold text-white text-sm">' + r.name.replace(/</g,'&lt;') + '</div><div class="text-xs text-slate-500">PDFToolkit User</div></div><div class="ml-auto text-amber-400 text-sm">' + stars + '</div></div><p class="text-sm text-slate-400">&ldquo;' + clean + '&rdquo;</p><div class="mt-3 text-[10px] text-slate-600">' + r.date + '</div>';
+      if (prepend) wall.prepend(card); else wall.appendChild(card);
+    }
+
+    function submitReview() {
+      var name = (document.getElementById('reviewName').value || '').trim();
+      var text = (document.getElementById('reviewText').value || '').trim();
+      if (!name || !text) { alert('Please enter your name and review.'); return; }
+      var review = { name: name, text: text, stars: selectedStars, date: new Date().toLocaleDateString('en-IN', {month:'short',year:'numeric'}) };
+      var stored = JSON.parse(localStorage.getItem('pdftoolkit_reviews') || '[]');
+      stored.unshift(review);
+      localStorage.setItem('pdftoolkit_reviews', JSON.stringify(stored));
+      appendReviewCard(review, true);
+      document.getElementById('reviewName').value = '';
+      document.getElementById('reviewText').value = '';
+      setReviewStar(5);
+      if (typeof confetti !== 'undefined') confetti({particleCount:80,spread:60,origin:{y:0.6},colors:['#6366f1','#a855f7','#fbbf24']});
+    }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "PDFToolkit - 100% Offline Document & PDF Suite",
+  "short_name": "PDFToolkit",
+  "description": "All-in-one private offline PDF, image, and document converter.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%236366f1'><rect width='512' height='512' rx='128' fill='%230f172a'/><path d='M340 100H172c-26.5 0-48 21.5-48 48v216c0 26.5 21.5 48 48 48h168c26.5 0 48-21.5 48-48V148c0-26.5-21.5-48-48-48zm-48 240H220v-32h72v32zm0-64H220v-32h72v32zm0-64H220v-32h72v32z' fill='%236366f1'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
