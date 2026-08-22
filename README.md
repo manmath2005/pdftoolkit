@@ -61,7 +61,7 @@ Then open `http://localhost:3000` in your browser.
 
 ## ☕ Support & Tip
 If you find PDFToolkit useful, you can support the developer via UPI:
-- **UPI ID**: `7030403004@upi`
+- **UPI ID**: `7030403004-3@ybl`
 - **Developer**: Manmath Sangave
 
 ---
